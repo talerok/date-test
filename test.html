@@ -1,0 +1,124 @@
+<html>
+    <body>
+        <div id="time-a"></div>
+        <div id="time-b"></div>
+    </body>
+    <script>
+        const _monthNames = [
+		'январь',
+		'февраль',
+		'март',
+		'апрель',
+		'май',
+		'июнь',
+		'июль',
+		'август',
+		'сентябрь',
+		'октябрь',
+		'ноябрь',
+		'декабрь'
+	];
+
+        const _monthNamesDays = [
+            'января',
+            'февраля',
+            'марта',
+            'апреля',
+            'мая',
+            'июня',
+            'июля',
+            'августа',
+            'сентября',
+            'октября',
+            'ноября',
+            'декабря'
+        ];
+
+        const _monthShortNames = [
+            'янв',
+            'фев',
+            'мар',
+            'апр',
+            'мая',
+            'июня',
+            'июля',
+            'авг',
+            'сен',
+            'окт',
+            'нояб',
+            'дек'
+        ];
+        const _dayOfWeeks = [
+            'пн',
+            'вт',
+            'ср',
+            'чт',
+            'пт',
+            'сб',
+            'вс'
+        ];
+
+        const letters = (value, count) => {
+		count = count || 2;
+		let strValue = String(value);
+
+		if (count <= strValue.length) {
+			return strValue;
+		}
+
+		while (count > strValue.length) {
+			strValue = `0${strValue}`;
+		}
+
+		return strValue;
+	}
+
+
+        const format = (date, format) => {
+            if (!date) {
+                return null;
+            }
+
+            format = format || 'dd.MM.yyyy';
+
+            const keys = {
+                yyyy: letters(date.getFullYear(), 4),
+                yyy: letters(date.getFullYear(), 4).substr(1, 3),
+                yy: letters(date.getFullYear(), 4).substr(2, 2),
+                dd: letters(date.getDate()),
+                d: date.getDate().toString(),
+                MMMM: (format.indexOf('d') >= 0
+                    ? _monthNamesDays
+                    : _monthNames)[date.getMonth()],
+                MMM: _monthShortNames[date.getMonth()],
+                MM: letters(date.getMonth() + 1),
+                M: (date.getMonth() + 1).toString(),
+                HH: letters(date.getHours(), 2),
+                h: date.getHours().toString(),
+                mm: letters(date.getMinutes(), 2),
+                m: date.getMinutes().toString(),
+                ss: letters(date.getSeconds(), 2),
+                s: date.getSeconds().toString(),
+                SSS: letters(date.getMilliseconds(), 3),
+                SS: letters(date.getMilliseconds(), 2),
+                S: letters(date.getMilliseconds(), 1)
+            };
+
+            let value = JSON.parse(JSON.stringify(format));
+
+            Object.keys(keys).forEach(key => {
+                value = value.replace(new RegExp(key, 'g'), keys[key]);
+            });
+
+            return value;
+        }
+
+        const timeA = document.getElementById('time-a');
+        const timeB = document.getElementById('time-b');
+
+
+        const date = new Date();
+        timeA.innerText = date;
+        timeB.innerText = format(date, 'HH:mm dd.MM.yyyy');
+    </script>
+</html>
